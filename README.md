@@ -25,53 +25,116 @@ graph TD;
     K --> Q[Generar reporte en PDF]
   ```
 
-# Funcionalidades:
+# Examen Parcial 2
+Nombre: Adrian Isaee Simbaña Moreira
+NRC: 14386
 
-## Autenticación:
+# Pasos Para la Ejecución
+Intalar todas las dependecias y librerias
+### `npm install`
+### `npm install antd`
+### `npm install file-saver html2pdf.js`
+### `npm install @supabase/supabase-js`
+### `npm install moment`
 
-Permite que los docentes se registren en el sistema para acceder a las funciones.
+Ejecutamos el proyecto de React
+### `npm start`
+[http://localhost:3000](http://localhost:3000)
 
-## Gestión de Roles (opcional):
+# Base de datos Supabase
+Ejecutar el script en Supabase
 
-Permite la gestión de roles como Docente y Estudiante para una mejor organización (opcional).
+```
+CREATE TABLE docentes (
+    id SERIAL PRIMARY KEY,
+    nombre TEXT,
+    correo_electronico TEXT,
+    contrasena TEXT
+);
 
-## Gestión de Temas:
 
-Permite a los docentes ingresar los temas del curso, especificando el título y objetivo de cada uno.
+CREATE TABLE cursos (
+    id SERIAL PRIMARY KEY,
+    nombre_curso TEXT,
+    descripcion TEXT
+);
 
-## Registro de Actividades:
 
-Permite registrar las actividades, para cada tema del curso.:
+CREATE TABLE temas_curso (
+    id SERIAL PRIMARY KEY,
+    id_curso INTEGER REFERENCES cursos(id),
+    titulo TEXT,
+    objetivo TEXT
+);
 
-    ✅ Realizadas
-    ❓ Pendientes
 
-## Registro de Calificaciones (opcional):
+CREATE TABLE actividades (
+    id SERIAL PRIMARY KEY,
+    id_tema_curso INTEGER REFERENCES temas_curso(id),
+    descripcion TEXT,
+    estado TEXT 
+);
 
-Permite a los docentes asignar calificaciones a las actividades realizadas por los estudiantes en cada tema.
-CRUD de Tareas:
 
-## Proporciona un CRUD para gestionar las tareas de cada tema, incluyendo:
+CREATE TABLE tareas (
+    id SERIAL PRIMARY KEY,
+    id_tema_curso INTEGER REFERENCES temas_curso(id),
+    descripcion TEXT,
+    clase_impartida BOOLEAN,
+    actividad_pendiente BOOLEAN,
+    observaciones TEXT
+);
 
-1.  Marcar si se impartió la clase sobre un tema.
-2.  Indicar si está pendiente la actividad relacionada con el tema.
-3.  Registrar observaciones adicionales sobre el tema o actividad.
 
-## Reporte en PDF:
+INSERT INTO docentes (nombre, correo_electronico, contrasena) 
+VALUES 
+('Juan Pérez', 'juan@example.com', 'contrasena123'),
+('María López', 'maria@example.com', 'password456'),
+('Carlos Ramirez', 'carlos@example.com', 'securepassword789'),
+('Ana Martínez', 'ana@example.com', '123456'),
+('Pedro García', 'pedro@example.com', 'abcdef');
 
-Genera un reporte en formato PDF que resume el progreso del curso, incluyendo temas impartidos, actividades realizadas, calificaciones asignadas y estado de las tareas.
+INSERT INTO cursos (nombre_curso, descripcion) 
+VALUES 
+('Matemáticas', 'Curso de Matemáticas Avanzadas'),
+('Historia', 'Curso de Historia del Mundo'),
+('Literatura', 'Curso de Literatura Clásica'),
+('Biología', 'Curso de Biología Celular'),
+('Programación', 'Curso de Desarrollo Web');
 
-# Interfaz de Usuario:
+INSERT INTO temas_curso (id_curso, titulo, objetivo) 
+VALUES 
+(1, 'Álgebra Lineal', 'Introducción al Álgebra Lineal'),
+(1, 'Cálculo Diferencial', 'Conceptos básicos del Cálculo Diferencial'),
+(2, 'Edad Media', 'Estudio de la Edad Media en Europa'),
+(3, 'El Quijote', 'Análisis de la obra El Quijote de Cervantes'),
+(4, 'Estructura Celular', 'Conocimientos sobre la estructura de la célula');
 
-La interfaz proporciona un entorno fácil de usar para que los docentes realicen las siguientes acciones:
+INSERT INTO actividades (id_tema_curso, descripcion, estado) 
+VALUES 
+(1, 'Resolver ejercicios de matrices', 'Realizadas'),
+(2, 'Lectura de Capítulo 1', 'Pendientes'),
+(3, 'Debate sobre la Edad Media', 'Realizadas'),
+(4, 'Análisis del Capítulo 5', 'Pendientes'),
+(5, 'Laboratorio de Microscopía', 'Realizadas');
 
-1.  Agregar, editar y eliminar temas del curso.
-2.  Registrar actividades realizadas para cada tema.
-3.  Gestionar las tareas relacionadas con cada tema (marcar como realizada, nueva actividad).
-4.  Generar un reporte en PDF del avance del curso.
+INSERT INTO tareas (id_tema_curso, descripcion, clase_impartida, actividad_pendiente, observaciones) 
+VALUES 
+(1, 'Practicar suma y resta de matrices', true, false, 'Los estudiantes mostraron un buen entendimiento del tema'),
+(2, 'Resumen del Capítulo 1', false, true, 'La tarea se asignará para la próxima clase'),
+(3, 'Preparar una presentación sobre la Edad Media', true, false, 'La presentación fue exitosa'),
+(4, 'Escribir un ensayo sobre el Capítulo 5', false, true, 'Se revisará en la próxima clase'),
+(5, 'Realizar observaciones bajo el microscopio', true, false, 'Se identificaron correctamente las estructuras celulares');
+```
+# IMPORTANTE!!
+Colocar las credenciales respectivas de supabase en el archivo 
+### `supabase.js`
 
-# Reporte en PDF:
+```
+import { createClient } from "@supabase/supabase-js";
 
-El reporte en PDF presenta un resumen claro del progreso del curso, con una tabla que incluye temas, objetivos, actividades, calificaciones y estado de las tareas. Además, puede contener gráficos o estadísticas para ofrecer un resumen visual del rendimiento del curso.
-
-Con este sistema, los docentes pueden mantener un registro detallado del avance del curso, lo que facilita la planificación, seguimiento y evaluación del progreso de los estudiantes.
+export const supabase = createClient(
+    "Url Supabase", 
+    "Key Supabase"
+);
+```
