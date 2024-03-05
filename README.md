@@ -25,7 +25,7 @@ graph TD;
     K --> Q[Generar reporte en PDF]
   ```
 
-# Examen Parcial 2
+# Prueba Intermedia Parcial 3
 Nombre: Adrian Isaee Simbaña Moreira
 NRC: 14386
 
