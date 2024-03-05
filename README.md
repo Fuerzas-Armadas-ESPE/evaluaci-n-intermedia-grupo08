@@ -27,6 +27,7 @@ graph TD;
 
 # Prueba Intermedia Parcial 3
 Nombre: Adrian Isaee Simbaña Moreira
+
 NRC: 14386
 
 # Pasos Para la Ejecución
